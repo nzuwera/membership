@@ -3,10 +3,7 @@ package com.nzuwera.membership.domain;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
@@ -47,21 +44,27 @@ public class Member {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
 
+    @ManyToOne
+    @JoinColumn
+    private Plan plan;
+
     public Member() {
     }
 
-    /**
-     *
-     * @param id
-     * @param firstName
-     * @param lastName
-     * @param dateOfBirth
-     */
-    public Member(@NotNull UUID id, @NotNull String firstName, @NotNull String lastName, @NotNull Date dateOfBirth) {
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
+    public Member(@NotNull UUID id, @NotNull String firstName, @NotNull String lastName, @NotNull Date dateOfBirth, Plan plan) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
+        this.plan = plan;
     }
 
     public UUID getId() {
@@ -104,12 +107,13 @@ public class Member {
         return Objects.equals(id, member.id) &&
                 Objects.equals(firstName, member.firstName) &&
                 Objects.equals(lastName, member.lastName) &&
-                Objects.equals(dateOfBirth, member.dateOfBirth);
+                Objects.equals(dateOfBirth, member.dateOfBirth) &&
+                Objects.equals(plan, member.plan);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, dateOfBirth);
+        return Objects.hash(id, firstName, lastName, dateOfBirth, plan);
     }
 
     @Override
@@ -119,6 +123,7 @@ public class Member {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
+                ", plan=" + plan +
                 '}';
     }
 }
