@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service(IPlanService.NAME)
@@ -20,7 +21,12 @@ public class PlanService implements IPlanService {
     @Value("${membership.expirydate}")
     private int membershipExpireDate;
 
-
+    /**
+     * Create new plan
+     *
+     * @param plan
+     * @return
+     */
     @Override
     public Plan createPlan(Plan plan) {
         plan.setStartDate(new Date());
@@ -30,6 +36,12 @@ public class PlanService implements IPlanService {
         return planRepository.save(plan);
     }
 
+    /**
+     * update plan
+     *
+     * @param plan
+     * @return
+     */
     @Override
     public Plan updatePlan(Plan plan) {
         if (planRepository.existsByName(plan.getName())) {
@@ -39,20 +51,40 @@ public class PlanService implements IPlanService {
         }
     }
 
+    /**
+     * delete plan by id
+     *
+     * @param id
+     */
     @Override
     public void deletePlanById(UUID id) {
         Plan toBeDeleted = planRepository.getOne(id);
         planRepository.delete(toBeDeleted);
     }
 
+    /**
+     * return plan by name
+     *
+     * @param name
+     * @return
+     * @throws Exception
+     */
     @Override
-    public Plan getPlanByName(String name) throws Exception {
+    public Plan getPlanByName(String name) {
         if (planRepository.existsByName(name)) {
             return planRepository.findByName(name);
         } else {
-            throw new Exception();
+            return new Plan();
         }
+    }
 
-
+    /**
+     * return all plans
+     *
+     * @return
+     */
+    @Override
+    public List<Plan> findAllPlan() {
+        return planRepository.findAll();
     }
 }

@@ -3,7 +3,6 @@ package com.nzuwera.membership;
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
 import com.nzuwera.membership.service.IPlanService;
-import com.nzuwera.membership.service.PlanService;
 import com.nzuwera.membership.utils.Utils;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -16,8 +15,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,39 +22,55 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MembershipApplicationTests {
-
-    private static final Logger LOGGER = Logger.getLogger(MembershipApplicationTests.class.getName());
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final UUID planId = UUID.randomUUID();
     private Plan plan;
+
     @Autowired
     private IPlanService planService;
 
+    /**
+     * Initialize plan object
+     */
     @Before
-    public void initialize(){
+    public void initialize() {
         plan = new Plan();
         plan.setId(planId);
-        plan.setName("Plan 001");
+        plan.setName("Plan001");
         plan.setType(PlanType.LIMITED);
     }
 
+    /**
+     * Positive test of creating a plan
+     */
     @Test
     public void test_001_createPlan() {
         Plan createdPlan = planService.createPlan(plan);
-        assertEquals("CreatedPlan",createdPlan.getName(),"Plan 001");
+        Assert.assertEquals("CreatedPlan", createdPlan.getName(), "Plan001");
     }
 
+    /**
+     * Positive test of updating a plan
+     *
+     * @throws Exception
+     */
     @Test
     public void test_002_updatePlan() throws Exception {
         Date startDate = new Date();
-        Date updatedEndDate = Utils.setEndDate(startDate,40);
-        Plan plan001 = planService.getPlanByName("Plan 001");
+        Date updatedEndDate = Utils.setEndDate(startDate, 40);
+        Plan plan001 = planService.getPlanByName("Plan001");
         plan001.setEndDate(updatedEndDate);
         planService.updatePlan(plan001);
-        Plan updatedPlan = planService.getPlanByName("Plan 001");
-        assertEqualDates(updatedPlan.getEndDate(),updatedEndDate);
+        Plan updatedPlan = planService.getPlanByName("Plan001");
+        assertEqualDates(updatedPlan.getEndDate(), updatedEndDate);
     }
 
+    /**
+     * Method to check if two dates are equal
+     *
+     * @param expected
+     * @param value
+     */
     private static void assertEqualDates(Date expected, Date value) {
         DateFormat formatter = new SimpleDateFormat(DATE_PATTERN);
         String strExpected = formatter.format(expected);
@@ -65,8 +78,13 @@ public class MembershipApplicationTests {
         assertEquals(strExpected, strValue);
     }
 
+    /**
+     * Test delete plan method
+     */
     @Test
-    public void test_999_deletePlan(){
+    public void test_999_deletePlan() {
         planService.deletePlanById(planId);
+        Plan deletedPlan = planService.getPlanByName("Plan001");
+        Assert.assertEquals("deletePlan",new Plan(),deletedPlan);
     }
 }
