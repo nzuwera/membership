@@ -49,7 +49,6 @@ public class Plan {
      * Plan type
      */
     @NotNull
-    @NotBlank
     @Column(name = "TYPE", nullable = false, columnDefinition = "varchar(10) default 'UNLIMITED'")
     @Enumerated(EnumType.STRING)
     private PlanType type;

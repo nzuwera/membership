@@ -1,4 +1,10 @@
 package com.nzuwera.membership.repository;
 
-public interface MemberRepository {
+import com.nzuwera.membership.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.UUID;
+
+@Repository(value = "MemberRepository")
+public interface MemberRepository extends JpaRepository<Member, UUID> {
 }

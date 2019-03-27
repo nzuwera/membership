@@ -8,5 +8,6 @@ import java.util.UUID;
 
 @Repository(value = "PlanRepository")
 public interface PlanRepository extends JpaRepository<Plan, UUID> {
-
+    Boolean existsByName(String name);
+    Plan findByName(String name);
 }
