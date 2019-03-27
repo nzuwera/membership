@@ -52,14 +52,13 @@ public class PlanService implements IPlanService {
     }
 
     /**
-     * delete plan by id
+     * delete plan
      *
-     * @param id
+     * @param plan
      */
     @Override
-    public void deletePlanById(UUID id) {
-        Plan toBeDeleted = planRepository.getOne(id);
-        planRepository.delete(toBeDeleted);
+    public void deletePlan(Plan plan) {
+        planRepository.delete(plan);
     }
 
     /**

@@ -10,6 +10,6 @@ public interface IPlanService {
     Plan createPlan(Plan plan);
     Plan updatePlan(Plan plan);
     Plan getPlanByName(String name);
-    void deletePlanById(UUID id);
+    void deletePlan(Plan plan);
     List<Plan> findAllPlan();
 }

@@ -83,7 +83,7 @@ public class MembershipApplicationTests {
      */
     @Test
     public void test_999_deletePlan() {
-        planService.deletePlanById(planId);
+        planService.deletePlan(plan);
         Plan deletedPlan = planService.getPlanByName("Plan001");
         Assert.assertEquals("deletePlan",new Plan(),deletedPlan);
     }
