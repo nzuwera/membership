@@ -35,7 +35,12 @@ public class Member {
     @NotNull
     @Column(name = "LAST_NAME")
     private String lastName;
-
+    /**
+     * Member email
+     */
+    @NotNull
+    @Column(name = "EMAIL")
+    private String email;
     /**
      * Member data of birth
      */
@@ -51,19 +56,20 @@ public class Member {
     public Member() {
     }
 
+    public Member(@NotNull UUID id, @NotNull String firstName, @NotNull String lastName, @NotNull String email, @NotNull Date dateOfBirth, Plan plan) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.plan = plan;
+    }
+
     public Plan getPlan() {
         return plan;
     }
 
     public void setPlan(Plan plan) {
-        this.plan = plan;
-    }
-
-    public Member(@NotNull UUID id, @NotNull String firstName, @NotNull String lastName, @NotNull Date dateOfBirth, Plan plan) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
         this.plan = plan;
     }
 
@@ -91,6 +97,14 @@ public class Member {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -107,13 +121,14 @@ public class Member {
         return Objects.equals(id, member.id) &&
                 Objects.equals(firstName, member.firstName) &&
                 Objects.equals(lastName, member.lastName) &&
+                Objects.equals(email, member.email) &&
                 Objects.equals(dateOfBirth, member.dateOfBirth) &&
                 Objects.equals(plan, member.plan);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, dateOfBirth, plan);
+        return Objects.hash(id, firstName, lastName, email, dateOfBirth, plan);
     }
 
     @Override
@@ -122,6 +137,7 @@ public class Member {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", plan=" + plan +
                 '}';

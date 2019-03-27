@@ -2,7 +2,10 @@ package com.nzuwera.membership;
 
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
+import com.nzuwera.membership.exception.AlreadyExistsException;
+import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.service.IPlanService;
+import com.nzuwera.membership.utils.ResponseObject;
 import com.nzuwera.membership.utils.Utils;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -44,7 +47,7 @@ public class MembershipApplicationTests {
      * Positive test of creating a plan
      */
     @Test
-    public void test_001_createPlan() {
+    public void test_001_createPlan() throws AlreadyExistsException {
         Plan createdPlan = planService.createPlan(plan);
         Assert.assertEquals("CreatedPlan", createdPlan.getName(), "Plan001");
     }
@@ -58,11 +61,12 @@ public class MembershipApplicationTests {
     public void test_002_updatePlan() throws Exception {
         Date startDate = new Date();
         Date updatedEndDate = Utils.setEndDate(startDate, 40);
-        Plan plan001 = planService.getPlanByName("Plan001");
-        plan001.setEndDate(updatedEndDate);
-        planService.updatePlan(plan001);
-        Plan updatedPlan = planService.getPlanByName("Plan001");
-        assertEqualDates(updatedPlan.getEndDate(), updatedEndDate);
+        ResponseObject<Plan> plan001 = planService.getPlanByName("Plan001");
+        Plan plan = plan001.getData();
+        plan.setEndDate(updatedEndDate);
+        planService.updatePlan(plan);
+        ResponseObject<Plan> updatedPlan = planService.getPlanByName("Plan001");
+        assertEqualDates(updatedPlan.getData().getEndDate(), updatedEndDate);
     }
 
     /**
@@ -82,9 +86,9 @@ public class MembershipApplicationTests {
      * Test delete plan method
      */
     @Test
-    public void test_999_deletePlan() {
+    public void test_999_deletePlan() throws NotFoundException {
         planService.deletePlan(plan);
-        Plan deletedPlan = planService.getPlanByName("Plan001");
-        Assert.assertEquals("deletePlan",new Plan(),deletedPlan);
+        ResponseObject<Plan> deletedPlan = planService.getPlanByName("Plan001");
+        Assert.assertEquals("deletePlan",new Plan(),deletedPlan.getData());
     }
 }

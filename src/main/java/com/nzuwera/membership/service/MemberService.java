@@ -1,6 +1,8 @@
 package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.domain.Member;
+import com.nzuwera.membership.exception.AlreadyExistsException;
+import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ public class MemberService implements IMemberService {
     MemberRepository memberRepository;
 
     @Override
-    public Member createMember() {
+    public Member createMember() throws AlreadyExistsException {
         return null;
     }
 
@@ -23,17 +25,21 @@ public class MemberService implements IMemberService {
     }
 
     @Override
-    public Member findMemberByLastNameAndFirstName(String lastName) {
-        return null;
+    public Member findMemberByEmail(String email) throws NotFoundException {
+        if (memberRepository.existsByEmail(email)) {
+            return memberRepository.findByEmail(email);
+        } else {
+            throw new NotFoundException(email);
+        }
     }
 
     @Override
     public List<Member> findAllMembers() {
-        return null;
+        return memberRepository.findAll();
     }
 
     @Override
-    public Void deleteMember(Member member) {
-        return null;
+    public void deleteMember(Member member) {
+        memberRepository.delete(member);
     }
 }

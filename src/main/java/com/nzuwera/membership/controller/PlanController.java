@@ -2,8 +2,13 @@ package com.nzuwera.membership.controller;
 
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
+import com.nzuwera.membership.exception.AlreadyExistsException;
+import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.service.IPlanService;
+import com.nzuwera.membership.utils.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -25,8 +30,9 @@ public class PlanController {
      * @throws Exception
      */
     @GetMapping(path = "/get-plan/{name}")
-    public Plan findPlanByName(@PathVariable String name) {
-        return planService.getPlanByName(name);
+    public ResponseEntity<ResponseObject<Plan>> findPlanByName(@PathVariable String name) throws NotFoundException {
+        ResponseObject foundPlan = planService.getPlanByName(name);
+        return ResponseEntity.status(HttpStatus.OK).body(foundPlan);
     }
 
     /**
@@ -35,8 +41,8 @@ public class PlanController {
      * @return
      */
     @GetMapping(path = "/get-plans")
-    public List<Plan> findAllPlans() {
-        return planService.findAllPlan();
+    public ResponseEntity<ResponseObject<List<Plan>>> findAllPlans() {
+        return ResponseEntity.status(HttpStatus.OK).body(planService.findAllPlan());
     }
 
     /**
@@ -47,11 +53,12 @@ public class PlanController {
      * @return
      */
     @PostMapping(path = "/create-plan")
-    public Plan createPlan(String planName, String planType) {
+    public ResponseEntity<ResponseObject<Plan>> createPlan(String planName, String planType) throws AlreadyExistsException {
         Plan newPlan = new Plan();
         newPlan.setId(UUID.randomUUID());
         newPlan.setName(planName);
         newPlan.setType(PlanType.valueOf(planType));
-        return planService.createPlan(newPlan);
+        ResponseObject<Plan> createdPlan = planService.createPlan(newPlan);
+        return ResponseEntity.status(HttpStatus.OK).body(createdPlan);
     }
 }

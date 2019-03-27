@@ -2,7 +2,11 @@ package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
+import com.nzuwera.membership.exception.AlreadyExistsException;
+import com.nzuwera.membership.exception.NotFoundException;
+import com.nzuwera.membership.message.Message;
 import com.nzuwera.membership.repository.PlanRepository;
+import com.nzuwera.membership.utils.ResponseObject;
 import com.nzuwera.membership.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,12 +32,19 @@ public class PlanService implements IPlanService {
      * @return
      */
     @Override
-    public Plan createPlan(Plan plan) {
-        plan.setStartDate(new Date());
-        if (plan.getType().equals(PlanType.LIMITED)) {
-            plan.setEndDate(Utils.setEndDate(plan.getStartDate(), membershipExpireDate));
+    public ResponseObject<Plan> createPlan(Plan plan) throws AlreadyExistsException {
+
+        if (planRepository.existsByName(plan.getName())) {
+            String message = String.format(Message.ALREADY_EXISTS, plan.getName());
+            return new ResponseObject(false, message, plan.getName(), 600);
+        } else {
+            plan.setStartDate(new Date());
+            if (plan.getType().equals(PlanType.LIMITED)) {
+                plan.setEndDate(Utils.setEndDate(plan.getStartDate(), membershipExpireDate));
+            }
+            return new ResponseObject(true, Message.FOUND, planRepository.save(plan), 200);
         }
-        return planRepository.save(plan);
+
     }
 
     /**
@@ -69,11 +80,12 @@ public class PlanService implements IPlanService {
      * @throws Exception
      */
     @Override
-    public Plan getPlanByName(String name) {
+    public ResponseObject<Plan> getPlanByName(String name) throws NotFoundException {
         if (planRepository.existsByName(name)) {
-            return planRepository.findByName(name);
+            return new ResponseObject(true, Message.FOUND, planRepository.findByName(name), 200);
         } else {
-            return new Plan();
+            String message = String.format(Message.NOT_FOUND, name);
+            return new ResponseObject(false, message, name, 400);
         }
     }
 
@@ -83,7 +95,7 @@ public class PlanService implements IPlanService {
      * @return
      */
     @Override
-    public List<Plan> findAllPlan() {
-        return planRepository.findAll();
+    public ResponseObject<List<Plan>> findAllPlan() {
+        return new ResponseObject(true, Message.FOUND, planRepository.findAll(), 200);
     }
 }
