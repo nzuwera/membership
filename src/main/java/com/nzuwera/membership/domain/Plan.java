@@ -40,7 +40,6 @@ public class Plan {
     /**
      * Plan end date
      */
-    @NotNull
     @Column(name = "END_DATE", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;

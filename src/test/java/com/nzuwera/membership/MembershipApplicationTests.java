@@ -3,12 +3,11 @@ package com.nzuwera.membership;
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
 import com.nzuwera.membership.service.IPlanService;
+import com.nzuwera.membership.service.PlanService;
 import com.nzuwera.membership.utils.Utils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,30 +23,32 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MembershipApplicationTests {
 
     private static final Logger LOGGER = Logger.getLogger(MembershipApplicationTests.class.getName());
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final UUID planId = UUID.randomUUID();
+    private Plan plan;
     @Autowired
     private IPlanService planService;
 
-    @Test
-    public void createPlan() {
-        Date startDate = new Date();
-        Plan plan = new Plan();
+    @Before
+    public void initialize(){
+        plan = new Plan();
         plan.setId(planId);
-        plan.setName("Plan 002");
-        plan.setStartDate(startDate);
-        plan.setEndDate(Utils.setEndDate(startDate,30));
+        plan.setName("Plan 001");
         plan.setType(PlanType.LIMITED);
-        LOGGER.log(Level.INFO,"createdPlan {0}",plan);
-        Plan createdPlan = planService.createPlan(plan);
-        assertEquals("CreatedPlan",createdPlan.getName(),"Plan 002");
     }
 
     @Test
-    public void updatePlan() throws Exception {
+    public void test_001_createPlan() {
+        Plan createdPlan = planService.createPlan(plan);
+        assertEquals("CreatedPlan",createdPlan.getName(),"Plan 001");
+    }
+
+    @Test
+    public void test_002_updatePlan() throws Exception {
         Date startDate = new Date();
         Date updatedEndDate = Utils.setEndDate(startDate,40);
         Plan plan001 = planService.getPlanByName("Plan 001");
@@ -64,4 +65,8 @@ public class MembershipApplicationTests {
         assertEquals(strExpected, strValue);
     }
 
+    @Test
+    public void test_999_deletePlan(){
+        planService.deletePlanById(planId);
+    }
 }

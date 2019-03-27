@@ -43,7 +43,7 @@ cmake-build-*/
 mvn*
 .mvn/
 *.iml
-
+target/
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 
