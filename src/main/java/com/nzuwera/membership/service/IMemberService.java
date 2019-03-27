@@ -9,7 +9,7 @@ import java.util.List;
 public interface IMemberService {
     String NAME = "MemberService";
 
-    Member createMember() throws AlreadyExistsException;
+    Member createMember(Member member) throws AlreadyExistsException;
 
     Member updateMember(Member member);
 
