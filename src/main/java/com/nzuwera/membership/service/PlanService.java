@@ -82,7 +82,7 @@ public class PlanService implements IPlanService {
     @Override
     public ResponseObject<Plan> getPlanByName(String name) throws NotFoundException {
         if (planRepository.existsByName(name)) {
-            return new ResponseObject<Plan>(true, Message.FOUND, planRepository.findByName(name), 200);
+            return new ResponseObject(true, Message.FOUND, planRepository.findByName(name), 200);
         } else {
             String message = String.format(Message.NOT_FOUND, name);
             return new ResponseObject(false, message, name, 400);

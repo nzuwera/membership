@@ -15,8 +15,8 @@ public class MemberService implements IMemberService {
     MemberRepository memberRepository;
 
     @Override
-    public Member createMember(Member member) throws AlreadyExistsException {
-        return memberRepository.save(member);
+    public Member createMember() throws AlreadyExistsException {
+        return null;
     }
 
     @Override
