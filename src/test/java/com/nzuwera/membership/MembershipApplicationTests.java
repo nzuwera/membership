@@ -48,7 +48,7 @@ public class MembershipApplicationTests {
      */
     @Test
     public void test_001_createPlan() throws AlreadyExistsException {
-        Plan createdPlan = planService.createPlan(plan);
+        Plan createdPlan = planService.createPlan(plan).getData();
         Assert.assertEquals("CreatedPlan", createdPlan.getName(), "Plan001");
     }
 
