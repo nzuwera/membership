@@ -1,4 +1,4 @@
-package com.nzuwera.membership.controller;
+package com.nzuwera.membership.restapi;
 
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
