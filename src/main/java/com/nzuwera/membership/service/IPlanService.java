@@ -6,7 +6,6 @@ import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.utils.ResponseObject;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IPlanService {
     String NAME = "PlanService";
