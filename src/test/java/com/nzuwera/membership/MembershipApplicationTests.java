@@ -7,10 +7,7 @@ import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.service.IPlanService;
 import com.nzuwera.membership.utils.ResponseObject;
 import com.nzuwera.membership.utils.Utils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +42,14 @@ public class MembershipApplicationTests {
         plan.setId(planId);
         plan.setName("Plan001");
         plan.setType(PlanType.LIMITED);
+    }
+
+    /**
+     * Cleanup after testing
+     */
+    @After
+    public void tearDown() {
+        plan = null;
     }
 
     /**
@@ -93,7 +98,7 @@ public class MembershipApplicationTests {
      * @throws NotFoundException NotFoundException
      */
     @Test
-    public void test_999_deletePlan() throws NotFoundException{
+    public void test_999_deletePlan() throws NotFoundException {
         planService.deletePlan(plan);
     }
 }
