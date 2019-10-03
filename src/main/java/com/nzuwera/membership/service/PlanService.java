@@ -6,6 +6,7 @@ import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.message.Message;
 import com.nzuwera.membership.repository.PlanRepository;
+import com.nzuwera.membership.utils.Names;
 import com.nzuwera.membership.utils.ResponseObject;
 import com.nzuwera.membership.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,29 +14,34 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
-@Service(IPlanService.NAME)
+@Service(Names.PLAN_SERVICE)
 public class PlanService implements IPlanService {
 
-    @Autowired
-    PlanRepository planRepository;
+    private final PlanRepository planRepository;
 
-    @Value("${membership.expirydate}")
+    @Autowired
+    public PlanService(PlanRepository planRepository){
+        this.planRepository = planRepository;
+    }
+
+    @Value("${app.membership.expiry-date}")
     private int membershipExpireDate;
+
+    private Boolean exists;
 
     /**
      * Create new plan
      *
-     * @param plan
-     * @return
+     * @param plan new plan
+     * @return created ResponseObject<Plan>
      */
     @Override
-    public ResponseObject<Plan> createPlan(Plan plan) throws AlreadyExistsException {
-
-        if (planRepository.existsByName(plan.getName())) {
+    public ResponseObject createPlan(Plan plan) throws AlreadyExistsException {
+        exists = planRepository.existsByName(plan.getName());
+        if (Boolean.TRUE.equals(exists)) {
             String message = String.format(Message.ALREADY_EXISTS, plan.getName());
-            return new ResponseObject(false, message, plan.getName(), 600);
+            throw new AlreadyExistsException(message);
         } else {
             plan.setStartDate(new Date());
             if (plan.getType().equals(PlanType.LIMITED)) {
@@ -49,22 +55,22 @@ public class PlanService implements IPlanService {
     /**
      * update plan
      *
-     * @param plan
-     * @return
+     * @param plan plan to be updated
      */
     @Override
-    public Plan updatePlan(Plan plan) {
-        if (planRepository.existsByName(plan.getName())) {
-            return planRepository.save(plan);
+    public void updatePlan(Plan plan) throws NotFoundException {
+        exists = planRepository.existsByName(plan.getName());
+        if (Boolean.TRUE.equals(exists)) {
+            planRepository.save(plan);
         } else {
-            return plan;
+            throw new NotFoundException(plan.getName());
         }
     }
 
     /**
      * delete plan
      *
-     * @param plan
+     * @param plan plan to be deleted
      */
     @Override
     public void deletePlan(Plan plan) {
@@ -74,27 +80,28 @@ public class PlanService implements IPlanService {
     /**
      * return plan by name
      *
-     * @param name
-     * @return
-     * @throws Exception
+     * @param name plan name
+     * @return ResponseObject<Plan>
+     * @throws NotFoundException NotFoundException
      */
     @Override
-    public ResponseObject<Plan> getPlanByName(String name) throws NotFoundException {
-        if (planRepository.existsByName(name)) {
+    public ResponseObject getPlanByName(String name) throws NotFoundException {
+        exists = planRepository.existsByName(name);
+        if (Boolean.TRUE.equals(exists)) {
             return new ResponseObject(true, Message.FOUND, planRepository.findByName(name), 200);
         } else {
             String message = String.format(Message.NOT_FOUND, name);
-            return new ResponseObject(false, message, name, 400);
+            throw new NotFoundException(message);
         }
     }
 
     /**
      * return all plans
      *
-     * @return
+     * @return ResponseObject<List<Plan>>
      */
     @Override
-    public ResponseObject<List<Plan>> findAllPlan() {
+    public ResponseObject findAllPlan() {
         return new ResponseObject(true, Message.FOUND, planRepository.findAll(), 200);
     }
 }

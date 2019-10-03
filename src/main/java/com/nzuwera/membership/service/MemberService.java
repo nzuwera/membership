@@ -4,38 +4,66 @@ import com.nzuwera.membership.domain.Member;
 import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.repository.MemberRepository;
+import com.nzuwera.membership.utils.Names;
+import com.nzuwera.membership.utils.ResponseObject;
+import com.nzuwera.membership.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 
-@Service(IMemberService.NAME)
+@Service(Names.MEMBER_SERVICE)
 public class MemberService implements IMemberService {
+
+
+    private final MemberRepository memberRepository;
+
     @Autowired
-    MemberRepository memberRepository;
-
-    @Override
-    public Member createMember(Member member) throws AlreadyExistsException {
-        return memberRepository.save(member);
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
+    /**
+     * Create new member
+     *
+     * @param member new member
+     * @return new created member
+     * @throws AlreadyExistsException AlreadyExistsException
+     */
     @Override
-    public Member updateMember(Member member) {
-        return null;
-    }
-
-    @Override
-    public Member findMemberByEmail(String email) throws NotFoundException {
-        if (memberRepository.existsByEmail(email)) {
-            return memberRepository.findByEmail(email);
+    public ResponseObject createMember(Member member) throws AlreadyExistsException {
+        if (memberRepository.existsByEmail(member.getEmail())) {
+            return Utils.setSuccessResponse(memberRepository.save(member));
         } else {
-            throw new NotFoundException(email);
+            throw new AlreadyExistsException(member.getEmail());
         }
     }
 
     @Override
-    public List<Member> findAllMembers() {
-        return memberRepository.findAll();
+    public ResponseObject updateMember(Member member) throws NotFoundException {
+        if (memberRepository.existsByEmail(member.getEmail())) {
+            return Utils.setSuccessResponse(memberRepository.save(member));
+        } else {
+            throw new NotFoundException(member.getEmail());
+        }
+    }
+
+    @Override
+    public ResponseObject findMemberByEmail(String email) {
+        try {
+            return Utils.setSuccessResponse(memberRepository.findByEmail(email));
+        } catch (EntityNotFoundException ex) {
+            return new ResponseObject(new NotFoundException(ex.getMessage()));
+        }
+    }
+
+    @Override
+    public ResponseObject findAllMembers() {
+        try {
+            return Utils.setSuccessResponse(memberRepository.findAll());
+        } catch (Exception ex) {
+            return new ResponseObject(ex);
+        }
     }
 
     @Override

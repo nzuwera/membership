@@ -5,12 +5,12 @@ import java.util.Objects;
 
 public class MemberDto {
     /**
-     * Member firstname
+     * Member first name
      */
     private String firstName;
 
     /**
-     * Member lastname
+     * Member last name
      */
     private String lastName;
     /**

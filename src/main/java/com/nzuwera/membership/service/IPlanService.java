@@ -5,18 +5,15 @@ import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.utils.ResponseObject;
 
-import java.util.List;
-
 public interface IPlanService {
-    String NAME = "PlanService";
 
-    ResponseObject<Plan> createPlan(Plan plan) throws AlreadyExistsException;
+    ResponseObject createPlan(Plan plan) throws AlreadyExistsException;
 
-    Plan updatePlan(Plan plan);
+    void updatePlan(Plan plan) throws NotFoundException;
 
     ResponseObject getPlanByName(String name) throws NotFoundException;
 
     void deletePlan(Plan plan);
 
-    ResponseObject<List<Plan>> findAllPlan();
+    ResponseObject findAllPlan();
 }

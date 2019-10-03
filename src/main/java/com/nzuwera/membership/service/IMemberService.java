@@ -3,19 +3,16 @@ package com.nzuwera.membership.service;
 import com.nzuwera.membership.domain.Member;
 import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
-
-import java.util.List;
-
+import com.nzuwera.membership.utils.ResponseObject;
 public interface IMemberService {
-    String NAME = "MemberService";
 
-    Member createMember(Member member) throws AlreadyExistsException;
+    ResponseObject createMember(Member member) throws AlreadyExistsException;
 
-    Member updateMember(Member member);
+    ResponseObject updateMember(Member member) throws NotFoundException;
 
-    Member findMemberByEmail(String email) throws NotFoundException;
+    ResponseObject findMemberByEmail(String email);
 
-    List<Member> findAllMembers();
+    ResponseObject findAllMembers();
 
     void deleteMember(Member member);
 }

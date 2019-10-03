@@ -1,19 +1,43 @@
 package com.nzuwera.membership.utils;
 
-public class ResponseObject<T> {
+import com.nzuwera.membership.exception.AlreadyExistsException;
+import com.nzuwera.membership.exception.NotFoundException;
+
+public class ResponseObject {
     private boolean status;
     private String message;
-    private T data;
+    private Object data;
     private int errorCode;
 
     public ResponseObject() {
     }
 
-    public ResponseObject(boolean status, String message, T data, int errorCode) {
+    public ResponseObject(boolean status, String message, Object data, int errorCode) {
         this.status = status;
         this.message = message;
         this.data = data;
         this.errorCode = errorCode;
+    }
+
+    public ResponseObject(NotFoundException ex){
+        this.status = false;
+        this.message = ex.getMessage();
+        this.data = ex;
+        this.errorCode = 404;
+    }
+
+    public ResponseObject(AlreadyExistsException ex){
+        this.status = false;
+        this.message = ex.getMessage();
+        this.data = ex;
+        this.errorCode = 409;
+    }
+
+    public ResponseObject(Exception ex){
+        this.status = false;
+        this.message = ex.getMessage();
+        this.data = ex;
+        this.errorCode = 500;
     }
 
     public boolean isStatus() {
@@ -32,11 +56,11 @@ public class ResponseObject<T> {
         this.message = message;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 

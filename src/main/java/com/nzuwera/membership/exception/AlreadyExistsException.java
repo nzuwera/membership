@@ -3,21 +3,14 @@ package com.nzuwera.membership.exception;
 import com.nzuwera.membership.message.Message;
 
 public class AlreadyExistsException extends Exception {
-    private String name;
-    private String message;
+    private final String errorString;
 
-    public AlreadyExistsException(String name) {
-        this.name = name;
+    public AlreadyExistsException(String errorMessage) {
+        this.errorString = String.format(Message.ALREADY_EXISTS, errorMessage);
     }
-
-    public String getName() {
-        return name;
-    }
-
 
     @Override
     public String getMessage() {
-        message = String.format(Message.ALREADY_EXISTS, name);
-        return message;
+        return this.errorString;
     }
 }

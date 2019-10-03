@@ -23,14 +23,14 @@ public class Member {
     private UUID id;
 
     /**
-     * Member firstname
+     * Member First name
      */
     @NotNull
     @Column(name = "FIRST_NAME")
     private String firstName;
 
     /**
-     * Member lastname
+     * Member Last name
      */
     @NotNull
     @Column(name = "LAST_NAME")

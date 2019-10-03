@@ -3,20 +3,16 @@ package com.nzuwera.membership.exception;
 import com.nzuwera.membership.message.Message;
 
 public class NotFoundException extends Exception {
-    private String name;
-    private String message;
+    private final String errorString;
 
-    public NotFoundException(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public NotFoundException(String errorMessage) {
+        this.errorString = String.format(Message.NOT_FOUND, errorMessage);
     }
 
     @Override
     public String getMessage() {
-        message = String.format(Message.NOT_FOUND, name);
-        return message;
+        return this.errorString;
     }
+
+
 }
