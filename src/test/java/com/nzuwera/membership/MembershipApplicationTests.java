@@ -52,7 +52,7 @@ public class MembershipApplicationTests {
      */
     @Test
     public void test_001_createPlan() throws AlreadyExistsException {
-        Plan createdPlan = (Plan)planService.createPlan(plan).getData();
+        Plan createdPlan = (Plan) planService.createPlan(plan).getData();
         Assert.assertEquals("CreatedPlan", plan001, createdPlan.getName());
     }
 
@@ -70,7 +70,7 @@ public class MembershipApplicationTests {
         plan.setEndDate(updatedEndDate);
         planService.updatePlan(plan);
         ResponseObject updatedPlan = planService.getPlanByName(plan001);
-        Plan plan1 = (Plan)updatedPlan.getData();
+        Plan plan1 = (Plan) updatedPlan.getData();
         assertEqualDates(plan1.getEndDate(), updatedEndDate);
     }
 
@@ -78,7 +78,7 @@ public class MembershipApplicationTests {
      * Method to check if two dates are equal
      *
      * @param expected expected date
-     * @param value date value to be tested
+     * @param value    date value to be tested
      */
     private static void assertEqualDates(Date expected, Date value) {
         DateFormat formatter = new SimpleDateFormat(DATE_PATTERN);
@@ -88,12 +88,12 @@ public class MembershipApplicationTests {
     }
 
     /**
-     * Test delete plan method
+     * Testing delete plan
+     *
+     * @throws NotFoundException NotFoundException
      */
     @Test
-    public void test_999_deletePlan() throws NotFoundException {
+    public void test_999_deletePlan() throws NotFoundException{
         planService.deletePlan(plan);
-        ResponseObject deletedPlan = planService.getPlanByName(plan001);
-        Assert.assertEquals("deletePlan", new Plan(), deletedPlan.getData());
     }
 }
