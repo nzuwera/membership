@@ -1,19 +1,19 @@
 package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.domain.Plan;
-import com.nzuwera.membership.exception.AlreadyExistsException;
-import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.utils.ResponseObject;
+
+import java.util.List;
 
 public interface IPlanService {
 
-    ResponseObject createPlan(Plan plan) throws AlreadyExistsException;
+    Plan createPlan(Plan plan);
 
-    void updatePlan(Plan plan) throws NotFoundException;
+    void updatePlan(Plan plan);
 
-    ResponseObject getPlanByName(String name) throws NotFoundException;
+    ResponseObject getPlanByName(String name) ;
 
     void deletePlan(Plan plan);
 
-    ResponseObject findAllPlan();
+    List<Plan> findAllPlan();
 }
