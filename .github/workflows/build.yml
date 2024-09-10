@@ -5,10 +5,34 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+env:
+  POSTGRES_USER: root
+  POSTGRES_PASSWORD: toor
+  POSTGRES_DB: membership
+  POSTGRES_PORT: 5433
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub PostgreSQL image
+        image: postgres:15.5-alpine
+        # Provide the password for postgres
+        env:
+          POSTGRES_DB: ${{env.POSTGRES_DB}}
+          POSTGRES_USER: ${{env.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{env.POSTGRES_PASSWORD}}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - ${{env.POSTGRES_PORT}}:5432
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,6 +54,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Setup .env file
+        run: |
+         echo "DATABASE_URL=jdbc:postgresql://localhost:$POSTGRES_PORT/$POSTGRES_DB > .env
+         echo "POSTGRES_USER=$POSTGRES_USER >> .env
+         echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD >> .env
+         cat .env
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
