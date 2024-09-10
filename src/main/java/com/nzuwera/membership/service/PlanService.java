@@ -2,7 +2,6 @@ package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.domain.Plan;
 import com.nzuwera.membership.domain.PlanType;
-import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.message.Message;
 import com.nzuwera.membership.repository.PlanRepository;
@@ -10,9 +9,12 @@ import com.nzuwera.membership.utils.ResponseObject;
 import com.nzuwera.membership.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlanService implements IPlanService {
@@ -20,7 +22,7 @@ public class PlanService implements IPlanService {
     private final PlanRepository planRepository;
 
     @Autowired
-    public PlanService(PlanRepository planRepository){
+    public PlanService(PlanRepository planRepository) {
         this.planRepository = planRepository;
     }
 
@@ -36,19 +38,15 @@ public class PlanService implements IPlanService {
      * @return created ResponseObject<Plan>
      */
     @Override
-    public ResponseObject createPlan(Plan plan) throws AlreadyExistsException {
-        exists = planRepository.existsByName(plan.getName());
-        if (Boolean.TRUE.equals(exists)) {
-            String message = String.format(Message.ALREADY_EXISTS, plan.getName());
-            throw new AlreadyExistsException(message);
-        } else {
-            plan.setStartDate(new Date());
-            if (plan.getType().equals(PlanType.LIMITED)) {
-                plan.setEndDate(Utils.setEndDate(plan.getStartDate(), membershipExpireDate));
-            }
-            return new ResponseObject(true, Message.FOUND, planRepository.save(plan), 200);
+    public Plan createPlan(Plan plan) {
+        Optional<Plan> optional = planRepository.findByName(plan.getName());
+        if (optional.isPresent())
+            return optional.get();
+        plan.setStartDate(new Date());
+        if (plan.getType().equals(PlanType.LIMITED)) {
+            plan.setEndDate(Utils.setEndDate(plan.getStartDate(), membershipExpireDate));
         }
-
+        return planRepository.save(plan);
     }
 
     /**
@@ -57,13 +55,11 @@ public class PlanService implements IPlanService {
      * @param plan plan to be updated
      */
     @Override
-    public void updatePlan(Plan plan) throws NotFoundException {
-        exists = planRepository.existsByName(plan.getName());
-        if (Boolean.TRUE.equals(exists)) {
+    public void updatePlan(Plan plan) {
+        planRepository.findByName(plan.getName()).ifPresent(plan1 -> {
             planRepository.save(plan);
-        } else {
-            throw new NotFoundException(plan.getName());
-        }
+        });
+
     }
 
     /**
@@ -84,23 +80,23 @@ public class PlanService implements IPlanService {
      * @throws NotFoundException NotFoundException
      */
     @Override
-    public ResponseObject getPlanByName(String name) throws NotFoundException {
-        exists = planRepository.existsByName(name);
-        if (Boolean.TRUE.equals(exists)) {
-            return new ResponseObject(true, Message.FOUND, planRepository.findByName(name), 200);
+    public ResponseObject getPlanByName(String name) {
+        Optional<Plan> exists = planRepository.findByName(name);
+        if (exists.isPresent()) {
+            return new ResponseObject(true, Message.FOUND, exists.get(), HttpStatus.OK.value());
         } else {
             String message = String.format(Message.NOT_FOUND, name);
-            throw new NotFoundException(message);
+            return new ResponseObject(new NotFoundException(message));
         }
     }
 
     /**
      * return all plans
      *
-     * @return ResponseObject<List<Plan>>
+     * @return ResponseObject<List < Plan>>
      */
     @Override
-    public ResponseObject findAllPlan() {
-        return new ResponseObject(true, Message.FOUND, planRepository.findAll(), 200);
+    public List<Plan> findAllPlan() {
+        return planRepository.findAll();
     }
 }
