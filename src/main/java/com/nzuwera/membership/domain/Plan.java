@@ -1,11 +1,10 @@
 package com.nzuwera.membership.domain;
 
-import org.hibernate.annotations.Type;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,8 +17,7 @@ public class Plan {
      */
     @NotNull
     @Id
-    @Column(name = "ID", nullable = false)
-    @Type(type = "pg-uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     /**
