@@ -6,7 +6,6 @@ import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.message.Message;
 import com.nzuwera.membership.repository.PlanRepository;
-import com.nzuwera.membership.utils.Names;
 import com.nzuwera.membership.utils.ResponseObject;
 import com.nzuwera.membership.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-@Service(Names.PLAN_SERVICE)
+@Service
 public class PlanService implements IPlanService {
 
     private final PlanRepository planRepository;

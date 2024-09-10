@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-@Repository(value = "PlanRepository")
+@Repository
 public interface PlanRepository extends JpaRepository<Plan, UUID> {
     Boolean existsByName(String name);
     Plan findByName(String name);

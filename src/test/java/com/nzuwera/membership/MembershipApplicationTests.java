@@ -20,14 +20,15 @@ import java.util.Date;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MembershipApplicationTests {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
-    private static final UUID planId = UUID.randomUUID();
-    private static final String plan001 = "Plan001";
+    private static final UUID PLAN_ID = UUID.randomUUID();
+    private static final String PLAN_001 = "Plan001";
     private Plan plan;
 
     @Autowired
@@ -39,7 +40,7 @@ public class MembershipApplicationTests {
     @Before
     public void initialize() {
         plan = new Plan();
-        plan.setId(planId);
+        plan.setId(PLAN_ID);
         plan.setName("Plan001");
         plan.setType(PlanType.LIMITED);
     }
@@ -58,7 +59,7 @@ public class MembershipApplicationTests {
     @Test
     public void test_001_createPlan() throws AlreadyExistsException {
         Plan createdPlan = (Plan) planService.createPlan(plan).getData();
-        Assert.assertEquals("CreatedPlan", plan001, createdPlan.getName());
+        Assert.assertEquals("CreatedPlan", PLAN_001, createdPlan.getName());
     }
 
     /**
@@ -70,13 +71,14 @@ public class MembershipApplicationTests {
     public void test_002_updatePlan() throws Exception {
         Date startDate = new Date();
         Date updatedEndDate = Utils.setEndDate(startDate, 40);
-        ResponseObject responseObject = planService.getPlanByName(plan001);
-        Plan plan = (Plan) responseObject.getData();
-        plan.setEndDate(updatedEndDate);
-        planService.updatePlan(plan);
-        ResponseObject updatedPlan = planService.getPlanByName(plan001);
-        Plan plan1 = (Plan) updatedPlan.getData();
-        assertEqualDates(plan1.getEndDate(), updatedEndDate);
+        assertNotNull(updatedEndDate);
+        ResponseObject currentPlanResponse = planService.getPlanByName(PLAN_001);
+        Plan currentPlan = (Plan) currentPlanResponse.getData();
+        currentPlan.setEndDate(updatedEndDate);
+        planService.updatePlan(currentPlan);
+        ResponseObject updatePlanResponse = planService.getPlanByName(PLAN_001);
+        Plan updatedPlan = (Plan) updatePlanResponse.getData();
+        assertEqualDates(updatedPlan.getEndDate(), updatedEndDate);
     }
 
     /**
@@ -98,7 +100,8 @@ public class MembershipApplicationTests {
      * @throws NotFoundException NotFoundException
      */
     @Test
-    public void test_999_deletePlan() throws NotFoundException {
+    public void test_999_deletePlan() {
+        assertNotNull(plan);
         planService.deletePlan(plan);
     }
 }
