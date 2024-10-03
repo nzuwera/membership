@@ -79,6 +79,7 @@
             <artifactId>flyway-mysql</artifactId>
             <version>${flyway.version}</version>
         </dependency>
+        <!-- Test dependencies  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -120,6 +121,16 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com/nzuwera/membership/config/**</exclude>
+                        <exclude>com/nzuwera/membership/domain/**</exclude>
+                        <exclude>com/nzuwera/membership/dto/**</exclude>
+                        <exclude>com/nzuwera/membership/exception/**</exclude>
+                        <exclude>com/nzuwera/membership/controller/**</exclude>
+                        <exclude>com/nzuwera/membership/utils/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
