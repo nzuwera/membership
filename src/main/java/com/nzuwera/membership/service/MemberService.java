@@ -1,47 +1,50 @@
 package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.domain.Member;
+import com.nzuwera.membership.dto.MemberDto;
 import com.nzuwera.membership.exception.AlreadyExistsException;
-import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.repository.MemberRepository;
 import com.nzuwera.membership.utils.ResponseObject;
-import com.nzuwera.membership.utils.Utils;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class MemberService implements IMemberService {
 
 
-    private final MemberRepository memberRepository;
-
-    @Autowired
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final MemberRepository repository;
 
     /**
      * Create new member
      *
-     * @param member new member
+     * @param memberDto new member
      * @return new created member
      * @throws AlreadyExistsException AlreadyExistsException
      */
     @Override
-    public ResponseObject createMember(Member member) throws AlreadyExistsException {
-        if (memberRepository.existsByEmail(member.getEmail())) {
-            return Utils.setSuccessResponse(memberRepository.save(member));
-        } else {
-            throw new AlreadyExistsException(member.getEmail());
-        }
+    public ResponseObject createMember(MemberDto memberDto) {
+        repository.findByEmail(memberDto.getEmail()).map(member -> {
+            throw new AlreadyExistsException(String.format("Member with email %s already exists", member.getEmail()));
+        });
+        Member member = MemberDto.toEntity(memberDto);
+        Member newMember = repository.save(member);
+        return ResponseObject.builder().data(newMember)
+                .status(true)
+                .errorCode(HttpStatus.CREATED.value())
+                .message(String.format("Member with email %s created", member.getEmail()))
+                .build();
+
     }
 
-    @Override
+   /* @Override
     public ResponseObject updateMember(Member member) throws NotFoundException {
-        if (memberRepository.existsByEmail(member.getEmail())) {
-            return Utils.setSuccessResponse(memberRepository.save(member));
+        if (repository.existsByEmail(member.getEmail())) {
+            return Utils.setSuccessResponse(repository.save(member));
         } else {
             throw new NotFoundException(member.getEmail());
         }
@@ -50,7 +53,7 @@ public class MemberService implements IMemberService {
     @Override
     public ResponseObject findMemberByEmail(String email) {
         try {
-            return Utils.setSuccessResponse(memberRepository.findByEmail(email));
+            return Utils.setSuccessResponse(repository.findByEmail(email));
         } catch (EntityNotFoundException ex) {
             return new ResponseObject(new NotFoundException(ex.getMessage()));
         }
@@ -59,7 +62,7 @@ public class MemberService implements IMemberService {
     @Override
     public ResponseObject findAllMembers() {
         try {
-            return Utils.setSuccessResponse(memberRepository.findAll());
+            return Utils.setSuccessResponse(repository.findAll());
         } catch (Exception ex) {
             return new ResponseObject(ex);
         }
@@ -67,6 +70,6 @@ public class MemberService implements IMemberService {
 
     @Override
     public void deleteMember(Member member) {
-        memberRepository.delete(member);
-    }
+        repository.delete(member);
+    }*/
 }

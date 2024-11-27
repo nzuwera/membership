@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.3.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.nzuwera</groupId>
@@ -45,10 +45,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
@@ -79,6 +75,11 @@
             <artifactId>flyway-mysql</artifactId>
             <version>${flyway.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
         <!-- Test dependencies  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -86,14 +87,23 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.restdocs</groupId>
-            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
@@ -123,12 +133,13 @@
                 <version>0.8.12</version>
                 <configuration>
                     <excludes>
-                        <exclude>com/nzuwera/membership/config/**</exclude>
-                        <exclude>com/nzuwera/membership/domain/**</exclude>
-                        <exclude>com/nzuwera/membership/dto/**</exclude>
-                        <exclude>com/nzuwera/membership/exception/**</exclude>
-                        <exclude>com/nzuwera/membership/controller/**</exclude>
-                        <exclude>com/nzuwera/membership/utils/**</exclude>
+                        <exclude>com/nzuwera/membership/MembershipApplication.class</exclude>
+                        <exclude>com/nzuwera/membership/config/*</exclude>
+                        <exclude>com/nzuwera/membership/domain/*</exclude>
+                        <exclude>com/nzuwera/membership/dto/*</exclude>
+                        <exclude>com/nzuwera/membership/exception/*</exclude>
+                        <exclude>com/nzuwera/membership/controller/*</exclude>
+                        <exclude>com/nzuwera/membership/utils/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

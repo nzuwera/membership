@@ -11,7 +11,7 @@ public class Home {
     @Value("${spring.application.name}")
     String appName;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = {"/","/home"})
     public String home(Model model) {
         model.addAttribute("appName", appName);
         return "home";

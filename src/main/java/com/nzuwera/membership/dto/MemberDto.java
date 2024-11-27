@@ -1,8 +1,20 @@
 package com.nzuwera.membership.dto;
 
-import java.util.Date;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.nzuwera.membership.domain.Member;
+import com.nzuwera.membership.domain.PlanType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberDto {
     /**
      * Member first name
@@ -24,84 +36,15 @@ public class MemberDto {
     /**
      * Member plan
      */
-    private String planName;
+    private PlanType planName;
 
-    public MemberDto() {
-    }
-
-    public MemberDto(String firstName, String lastName, String email, Date dateOfBirth, String planName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dateOfBirth = dateOfBirth;
-        this.planName = planName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getPlanName() {
-        return planName;
-    }
-
-    public void setPlanName(String planName) {
-        this.planName = planName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MemberDto memberDto = (MemberDto) o;
-        return Objects.equals(firstName, memberDto.firstName) &&
-                Objects.equals(lastName, memberDto.lastName) &&
-                Objects.equals(email, memberDto.email) &&
-                Objects.equals(dateOfBirth, memberDto.dateOfBirth) &&
-                Objects.equals(planName, memberDto.planName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, email, dateOfBirth, planName);
-    }
-
-    @Override
-    public String toString() {
-        return "MemberDto{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", planName='" + planName + '\'' +
-                '}';
-    }
+   public static Member toEntity(MemberDto memberDto) {
+       Member member = new Member();
+       member.setFirstName(memberDto.getFirstName());
+       member.setLastName(memberDto.getLastName());
+       member.setEmail(memberDto.getEmail());
+       member.setDateOfBirth(memberDto.getDateOfBirth());
+       member.setPlan(memberDto.getPlanName());
+       return member;
+   }
 }

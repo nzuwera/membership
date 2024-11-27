@@ -15,4 +15,8 @@ class MemberControllerTest {
     @Test
     void createNewMember() {
     }
+
+    @Test
+    void testCreateNewMember() {
+    }
 }
