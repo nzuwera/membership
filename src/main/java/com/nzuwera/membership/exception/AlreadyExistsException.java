@@ -1,8 +1,11 @@
 package com.nzuwera.membership.exception;
 
 import com.nzuwera.membership.message.Message;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class AlreadyExistsException extends Exception {
+@ResponseStatus(HttpStatus.CONFLICT)
+public class AlreadyExistsException extends RuntimeException {
     private final String errorString;
 
     public AlreadyExistsException(String errorMessage) {
