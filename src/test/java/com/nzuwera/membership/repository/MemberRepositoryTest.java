@@ -4,6 +4,7 @@ import com.nzuwera.membership.domain.Member;
 import com.nzuwera.membership.domain.PlanType;
 import com.nzuwera.membership.dto.MemberDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -26,6 +27,7 @@ class MemberRepositoryTest {
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15.5-alpine");
 
     @Test
+    @DisplayName("Test is test container is initialized correctly")
     void connectionEstablished() {
         assertThat(postgreSQLContainer.isCreated()).isTrue();
         assertThat(postgreSQLContainer.isRunning()).isTrue();
@@ -58,7 +60,8 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void testFindByEmail() {
+    @DisplayName("Should Return Existing Member by email")
+    void shouldReturnExistingMemberByEmail() {
         Optional<Member> member = memberRepository.findByEmail("test1@email.com");
         assertThat(member.isPresent()).isTrue();
         assertThat(member.get().getEmail()).isEqualTo("test1@email.com");
@@ -68,4 +71,12 @@ class MemberRepositoryTest {
         assertThat(member.get().getLastName()).isEqualTo("Doe");
         assertThat(member.get().getPlan()).isEqualTo(PlanType.UNLIMITED);
     }
+
+    @Test
+    @DisplayName("Should return Optional.Empty() when member does not exist")
+    void shouldReturnEmptyOptionalWhenMemberDoesNotExist() {
+        Optional<Member> member = memberRepository.findByEmail("test3@email.com");
+        assertThat(member.isPresent()).isFalse();
+    }
+
 }
