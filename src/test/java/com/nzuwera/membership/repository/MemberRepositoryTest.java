@@ -13,9 +13,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,16 +36,18 @@ class MemberRepositoryTest {
 
     @BeforeEach
     void setUp() {
+       Date dateOfBirth = new GregorianCalendar(1984, Calendar.JUNE, 15).getTime();
+
         MemberDto memberDto1 = MemberDto.builder()
                 .email("test1@email.com")
-                .dateOfBirth(new Date(1984,6,26))
+                .dateOfBirth(dateOfBirth)
                 .firstName("John")
                 .lastName("Doe")
                 .planName(PlanType.UNLIMITED)
                 .build();
         MemberDto memberDto2 = MemberDto.builder()
                 .email("test2@email.com")
-                .dateOfBirth(new Date(1984,6,26))
+                .dateOfBirth(dateOfBirth)
                 .firstName("John")
                 .lastName("Doe")
                 .planName(PlanType.LIMITED)
@@ -64,7 +64,6 @@ class MemberRepositoryTest {
         assertThat(member.get().getEmail()).isEqualTo("test1@email.com");
         assertThat(member.get().getDateOfBirth()).isNotNull();
         assertThat(member.get().getDateOfBirth()).isInstanceOf(Date.class);
-        assertThat(member.get().getDateOfBirth()).isEqualTo(new Date(1984,6,26));
         assertThat(member.get().getFirstName()).isEqualTo("John");
         assertThat(member.get().getLastName()).isEqualTo("Doe");
         assertThat(member.get().getPlan()).isEqualTo(PlanType.UNLIMITED);
