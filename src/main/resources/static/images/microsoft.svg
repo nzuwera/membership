@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <rect x="1" y="1" width="10" height="10" fill="#F1512F"/><!-- red-ish -->
+  <rect x="13" y="1" width="10" height="10" fill="#7DB902"/><!-- green-ish -->
+  <rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><!-- blue-ish -->
+  <rect x="13" y="13" width="10" height="10" fill="#F7B500"/><!-- yellow-ish -->
+</svg>
