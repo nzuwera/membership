@@ -9,12 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberService implements IMemberService {
+class MemberService implements IMemberService {
 
 
     private final MemberRepository repository;
@@ -27,13 +28,15 @@ public class MemberService implements IMemberService {
      * @throws AlreadyExistsException AlreadyExistsException
      */
     @Override
+    @Transactional
     public ResponseObject createMember(MemberDto memberDto) {
         repository.findByEmail(memberDto.getEmail()).map(member -> {
             throw new AlreadyExistsException(String.format("Member with email %s already exists", member.getEmail()));
         });
         Member member = MemberDto.toEntity(memberDto);
         Member newMember = repository.save(member);
-        return ResponseObject.builder().data(newMember)
+        return ResponseObject.builder()
+                .data(MemberDto.fromEntity(newMember))
                 .status(true)
                 .errorCode(HttpStatus.CREATED.value())
                 .message(String.format("Member with email %s created", member.getEmail()))
