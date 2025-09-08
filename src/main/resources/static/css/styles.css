@@ -1,0 +1,193 @@
+/* styles.css -- responsive image banner for login screen with CSS custom properties */
+
+/* CSS Custom Properties (Variables) */
+@import "colors.css";
+
+/* Base styles */
+body {
+    background: var(--primary-blue);
+}
+
+/* Card height consistency */
+.img-card {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    width: 100%;
+    /* default mobile height for banner */
+    height: var(--card-height-mobile);
+    margin-bottom: 24px;
+}
+
+/* Login form card - match image card height */
+.col-12.col-lg-6 .card:not(.img-card) {
+    height: var(--card-height-mobile);
+    margin-bottom: 24px;
+}
+
+/* Ensure card body fills the entire height */
+.col-12.col-lg-6 .card:not(.img-card) .card-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cover-image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Small UI adjustments */
+.social-logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--secondary-light);
+}
+
+/* Login page specific styles using CSS variables */
+.login-background {
+    background: var(--gradient-background);
+}
+
+.login-card {
+    background: var(--white);
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-card);
+}
+
+.image-section {
+    background: var(--gradient-form);
+    color: var(--white);
+}
+
+.form-control {
+    border: 2px solid var(--border-light);
+    border-radius: var(--border-radius-medium);
+    transition: border-color var(--transition-medium);
+}
+
+.form-control:focus {
+    border-color: var(--primary-purple);
+    box-shadow: var(--shadow-focus);
+}
+
+.btn-login {
+    background: var(--gradient-form);
+    border: none;
+    border-radius: var(--border-radius-medium);
+    transition: transform var(--transition-fast);
+}
+
+.btn-login:hover {
+    box-shadow: var(--shadow-light);
+}
+
+.btn-social {
+    border: 2px solid var(--border-light);
+    background: var(--white);
+    border-radius: var(--border-radius-medium);
+    transition: all var(--transition-medium);
+}
+
+.btn-google:hover {
+    border-color: var(--google-red);
+    background: var(--google-red);
+    color: var(--white);
+}
+
+.btn-microsoft:hover {
+    border-color: var(--microsoft-blue);
+    background: var(--microsoft-blue);
+    color: var(--white);
+}
+
+.login-header h2 {
+    color: var(--text-dark);
+}
+
+.login-header p {
+    color: var(--text-light);
+}
+
+.forgot-password a {
+    color: var(--primary-purple);
+}
+
+.divider span {
+    background: var(--white);
+    color: var(--text-light);
+}
+
+/* Larger screens: make both cards taller and ensure equal height */
+@media (min-width: 992px) {
+    .img-card {
+        height: var(--card-height-desktop);
+        margin-bottom: 0;
+    }
+
+    /* Match login form card height to image card */
+    .col-12.col-lg-6 .card:not(.img-card) {
+        height: var(--card-height-desktop);
+        margin-bottom: 0;
+    }
+
+    /* Ensure the row has equal height columns */
+    .row.align-items-center {
+        min-height: var(--card-height-desktop);
+    }
+
+    /* Alternative approach using flexbox for equal heights */
+    .row.gx-5 {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .row.gx-5 > .col-12.col-lg-6 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row.gx-5 > .col-12.col-lg-6 > .card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* Additional utility classes for height consistency */
+.h-equal {
+    height: var(--card-height-mobile);
+}
+
+@media (min-width: 992px) {
+    .h-equal {
+        height: var(--card-height-desktop);
+    }
+}
+
+/* Ensure form content is properly spaced within the card */
+.card-body.p-4.p-lg-5 {
+    padding: 1.5rem !important;
+}
+
+@media (min-width: 992px) {
+    .card-body.p-4.p-lg-5 {
+        padding: 3rem !important;
+    }
+}

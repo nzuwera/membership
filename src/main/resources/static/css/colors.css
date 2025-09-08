@@ -1,0 +1,44 @@
+:root {
+    /* Primary Colors */
+    --primary-blue: #005AE6;
+    --primary-purple: #4f46e5;
+    --primary-violet: #7c3aed;
+
+    /* Secondary Colors */
+    --secondary-light: #e9ecef;
+    --secondary-gray: #666;
+    --secondary-dark: #333;
+
+    /* Social Media Colors */
+    --google-red: #db4437;
+    --microsoft-blue: #00a1f1;
+
+    /* Neutral Colors */
+    --white: #ffffff;
+    --border-light: #e1e5e9;
+    --text-light: #666;
+    --text-dark: #333;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--primary-blue), var(--primary-violet));
+    --gradient-form: linear-gradient(135deg, var(--primary-purple), var(--primary-violet));
+    --gradient-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    /* Spacing */
+    --border-radius: 14px;
+    --border-radius-large: 20px;
+    --border-radius-medium: 10px;
+
+    /* Heights */
+    --card-height-mobile: 260px;
+    --card-height-desktop: 610px;
+
+    /* Shadows */
+    --shadow-light: 0 5px 15px rgba(79, 70, 229, 0.3);
+    --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.1);
+    --shadow-focus: 0 0 0 3px rgba(79, 70, 229, 0.1);
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+}
