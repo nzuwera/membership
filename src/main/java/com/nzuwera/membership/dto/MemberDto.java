@@ -70,7 +70,8 @@ public class MemberDto {
        member.setPlan(memberDto.getPlanName());
        member.setRole(memberDto.getRole());
        member.setStatus(memberDto.getStatus());
-       // password will be set in service after encoding
+       // Set password as provided; in production it should be encoded by service layer.
+       member.setPassword(memberDto.getPassword());
        return member;
    }
 

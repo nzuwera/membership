@@ -46,6 +46,7 @@ class MemberRepositoryTest {
                 .firstName("John")
                 .lastName("Doe")
                 .planName(PlanType.UNLIMITED)
+                .password("secret123!")
                 .build();
         MemberDto memberDto2 = MemberDto.builder()
                 .email("test2@email.com")
@@ -53,6 +54,7 @@ class MemberRepositoryTest {
                 .firstName("John")
                 .lastName("Doe")
                 .planName(PlanType.LIMITED)
+                .password("secret123!")
                 .build();
         Member member1 = MemberDto.toEntity(memberDto1);
         Member member2 = MemberDto.toEntity(memberDto2);

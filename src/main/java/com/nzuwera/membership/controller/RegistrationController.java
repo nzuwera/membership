@@ -35,6 +35,9 @@ class RegistrationController {
         if (result.hasErrors()) {
             return "register";
         }
+        // Enforce self-registration constraints: ACTIVE status and USER role only
+        memberDto.setRole(Role.USER);
+        memberDto.setStatus(MemberStatus.ACTIVE);
         memberService.createMember(memberDto);
         return "redirect:/login";
     }

@@ -20,7 +20,6 @@
         <docker-maven-plugin.version>0.45.0</docker-maven-plugin.version>
         <dotenv.version>3.0.0</dotenv.version>
         <flyway.version>8.5.13</flyway.version>
-        <bootstrap.version>5.3.7</bootstrap.version>
         <thymeleaf-dialect.version>3.4.0</thymeleaf-dialect.version>
     </properties>
 
@@ -46,16 +45,6 @@
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
             <version>${thymeleaf-dialect.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>${bootstrap.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

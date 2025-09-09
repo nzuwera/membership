@@ -17,10 +17,19 @@ import java.util.UUID;
 @Table(name = "MEMBER")
 public class Member {
 
+    @PrePersist
+    void prePersist() {
+        if (this.role == null) {
+            this.role = Role.USER;
+        }
+        if (this.status == null) {
+            this.status = MemberStatus.ACTIVE;
+        }
+    }
+
     /**
      * Member Id
      */
-    @NotNull
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
