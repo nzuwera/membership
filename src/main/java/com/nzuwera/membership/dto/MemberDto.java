@@ -3,7 +3,9 @@ package com.nzuwera.membership.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nzuwera.membership.domain.Member;
+import com.nzuwera.membership.domain.MemberStatus;
 import com.nzuwera.membership.domain.PlanType;
+import com.nzuwera.membership.domain.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -39,6 +41,11 @@ public class MemberDto {
     @NotBlank(message = "email is required")
     private String email;
     /**
+     * Member password (plain for input only)
+     */
+    @NotBlank(message = "password is required")
+    private String password;
+    /**
      * Member date of birth
      */
     @Past(message = "dateOfBirth must be in the past")
@@ -51,6 +58,9 @@ public class MemberDto {
     @JsonProperty("plan")
     private PlanType planName;
 
+    private Role role;
+    private MemberStatus status;
+
    public static Member toEntity(MemberDto memberDto) {
        Member member = new Member();
        member.setFirstName(memberDto.getFirstName());
@@ -58,6 +68,10 @@ public class MemberDto {
        member.setEmail(memberDto.getEmail());
        member.setDateOfBirth(memberDto.getDateOfBirth());
        member.setPlan(memberDto.getPlanName());
+       member.setRole(memberDto.getRole());
+       member.setStatus(memberDto.getStatus());
+       // Set password as provided; in production it should be encoded by service layer.
+       member.setPassword(memberDto.getPassword());
        return member;
    }
 
@@ -68,6 +82,8 @@ public class MemberDto {
                .email(member.getEmail())
                .dateOfBirth(member.getDateOfBirth())
                .planName(member.getPlan())
+               .role(member.getRole())
+               .status(member.getStatus())
                .build();
    }
 }
