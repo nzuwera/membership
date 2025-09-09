@@ -42,8 +42,16 @@ public class Member {
      * Member email
      */
     @NotNull
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
+
+    /**
+     * Password (BCrypt hashed)
+     */
+    @NotNull
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
+
     /**
      * Member data of birth
      */
@@ -55,5 +63,13 @@ public class Member {
     @Column
     @Enumerated(EnumType.STRING)
     private PlanType plan;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE", nullable = false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS", nullable = false)
+    private MemberStatus status;
 
 }
