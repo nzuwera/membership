@@ -4,6 +4,8 @@ import com.nzuwera.membership.dto.MemberDto;
 import com.nzuwera.membership.service.IMemberService;
 import com.nzuwera.membership.utils.ResponseObject;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 class MemberPageController {
+    private static final Logger log = LoggerFactory.getLogger(MemberPageController.class);
 
     private final IMemberService memberService;
 
@@ -34,6 +37,7 @@ class MemberPageController {
     @PostMapping
     String create(@Valid @ModelAttribute("member") MemberDto memberDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            log.error("Validation error: {}", result.getAllErrors());
             return "members/new";
         }
         memberService.createMember(memberDto);

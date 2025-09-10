@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -50,6 +51,7 @@ public class MemberDto {
      */
     @Past(message = "dateOfBirth must be in the past")
     @NotNull(message = "dateOfBirth is required")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
     /**
      * Member plan

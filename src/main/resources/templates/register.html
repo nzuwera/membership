@@ -3,57 +3,73 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Register</title>
+    <title>Sign up</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body class="bg-light">
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header">Create an account</div>
-                <div class="card-body">
-                    <form th:action="@{/register}" th:object="${member}" method="post">
+<section class="container py-5">
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="row g-0">
+            <!-- Illustration -->
+            <div class="col-lg-6 col-xl-7 col-xxl-6 position-relative overflow-hidden bg-dark d-none d-lg-block bg-primary-blue">
+                <div class="d-flex align-items-center justify-content-center">
+                    <img class="img-fluid" loading="lazy" th:src="@{/images/illustration.svg}"
+                         alt="Member's illustration">
+                </div>
+            </div>
+            <!-- Form -->
+            <div class="col-lg-6 col-xl-5 col-xxl-6">
+                <div class="card-body p-5">
+                    <h2 class="card-title mb-1">Create your account</h2>
+                    <p class="card-text text-secondary mb-4">Join the Member Portal</p>
+                    <form th:action="@{/register}" th:object="${member}" method="post" class="row g-3">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label class="form-label">First name</label>
                             <input type="text" class="form-control" th:field="*{firstName}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label class="form-label">Last name</label>
                             <input type="text" class="form-control" th:field="*{lastName}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-12">
                             <label class="form-label">Email</label>
                             <input type="email" class="form-control" th:field="*{email}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label class="form-label">Password</label>
                             <input type="password" class="form-control" th:field="*{password}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Confirm password</label>
+                            <input type="password" class="form-control" name="confirmPassword" required>
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label">Date of birth</label>
                             <input type="date" class="form-control" th:field="*{dateOfBirth}" required>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-md-6">
                             <label class="form-label">Plan</label>
                             <select class="form-select" th:field="*{planName}" required>
                                 <option th:each="p : ${T(com.nzuwera.membership.domain.PlanType).values()}"
                                         th:value="${p}" th:text="${p}"></option>
                             </select>
                         </div>
-                        <!-- Self-registration always creates ACTIVE USER; role and status are fixed in backend -->
+                        <!-- Hidden defaults handled in backend too -->
                         <input type="hidden" th:field="*{role}" value="USER"/>
                         <input type="hidden" th:field="*{status}" value="ACTIVE"/>
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary" type="submit">Register</button>
-                            <a class="btn btn-outline-secondary" th:href="@{/login}">Back to login</a>
+                        <div class="d-grid">
+                            <button class="btn btn-primary" type="submit">Signup</button>
                         </div>
+                        <p class="small text-center mt-2 mb-0">Already have an account? <a th:href="@{/login}">Login</a></p>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

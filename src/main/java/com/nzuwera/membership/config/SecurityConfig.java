@@ -22,7 +22,7 @@ class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/members", true)
                         .permitAll()
                 )
                 .logout(Customizer.withDefaults())

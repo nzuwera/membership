@@ -21,23 +21,29 @@ class BootstrapConfig {
 
     private static final Logger log = LoggerFactory.getLogger(BootstrapConfig.class);
 
+    private final AppProperties appProperties;
+
+    BootstrapConfig(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
     @Bean
     ApplicationRunner seedDefaultAdmin(MemberRepository repository, PasswordEncoder passwordEncoder) {
         return args -> {
-            String adminEmail = "SUPER_ADMIN"; // using username field stored as email column per current domain
+            String adminEmail = appProperties.getDefaultAdminUsername(); // using username field stored as email column per current domain
             repository.findByEmail(adminEmail).ifPresentOrElse(m -> {
                 log.info("Default admin already exists: {}", adminEmail);
             }, () -> {
                 Member admin = new Member();
-                admin.setFirstName("SUPER");
-                admin.setLastName("ADMIN");
+                admin.setFirstName("Super");
+                admin.setLastName("Administrator");
                 admin.setEmail(adminEmail);
-                admin.setPassword(passwordEncoder.encode("#0987654321!"));
+                admin.setPassword(passwordEncoder.encode(appProperties.getDefaultAdminPassword()));
                 // set a safe default DOB
                 LocalDate dob = LocalDate.of(1990, 1, 1);
                 admin.setDateOfBirth(Date.from(dob.atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 // choose a default plan (any valid enum)
-                admin.setPlan(PlanType.SILVER);
+                admin.setPlan(PlanType.UNLIMITED);
                 admin.setRole(Role.ADMIN);
                 admin.setStatus(MemberStatus.ACTIVE);
                 repository.save(admin);
