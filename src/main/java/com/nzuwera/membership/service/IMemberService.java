@@ -1,6 +1,7 @@
 package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.dto.MemberDto;
+import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.utils.ResponseObject;
 
 public interface IMemberService {
@@ -13,5 +14,5 @@ public interface IMemberService {
 
     ResponseObject findAllMembers();
 
-    void deleteMember(String email);
+    void deleteMember(String email) throws NotFoundException;
 }

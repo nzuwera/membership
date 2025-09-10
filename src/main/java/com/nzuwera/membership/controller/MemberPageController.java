@@ -1,11 +1,16 @@
 package com.nzuwera.membership.controller;
 
+import com.nzuwera.membership.config.AppProperties;
+import com.nzuwera.membership.domain.MemberStatus;
+import com.nzuwera.membership.domain.Role;
 import com.nzuwera.membership.dto.MemberDto;
+import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.service.IMemberService;
 import com.nzuwera.membership.utils.ResponseObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +25,8 @@ class MemberPageController {
     private static final Logger log = LoggerFactory.getLogger(MemberPageController.class);
 
     private final IMemberService memberService;
+    private final AppProperties appProperties;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     String list(Model model) {
@@ -40,6 +47,9 @@ class MemberPageController {
             log.error("Validation error: {}", result.getAllErrors());
             return "members/new";
         }
+        memberDto.setPassword(passwordEncoder.encode(appProperties.getNewUserDefaultPassword()));
+        memberDto.setRole(Role.USER);
+        memberDto.setStatus(MemberStatus.ACTIVE);
         memberService.createMember(memberDto);
         return "redirect:/members";
     }
@@ -61,7 +71,7 @@ class MemberPageController {
     }
 
     @PostMapping("/{email}/delete")
-    String delete(@PathVariable String email) {
+    String delete(@PathVariable String email) throws NotFoundException {
         memberService.deleteMember(email);
         return "redirect:/members";
     }

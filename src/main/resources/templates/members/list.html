@@ -78,9 +78,13 @@
                                 </td>
                                 <td class="text-end">
                                     <a class="btn btn-sm btn-outline-primary" th:href="@{'/members/' + ${m.email}}">View</a>
-                                    <a class="btn btn-sm btn-outline-secondary" th:href="@{'/members/' + ${m.email}}">Edit</a>
-                                    <form th:action="@{'/members/' + ${m.email} + '/delete'}" method="post" class="d-inline">
-                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                    <a class="btn btn-sm btn-outline-secondary" th:href="@{'/members/' + ${m.email}}"
+                                       sec:authorize="hasRole('ADMIN')">Edit</a>
+                                    <form th:action="@{'/members/' + ${m.email} + '/delete'}" method="post"
+                                          class="d-inline" sec:authorize="hasRole('ADMIN')">
+                                        <input type="hidden" th:name="${_csrf.parameterName}"
+                                               th:value="${_csrf.token}"/>
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                     </form>
                                 </td>

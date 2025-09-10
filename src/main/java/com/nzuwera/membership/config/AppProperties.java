@@ -12,6 +12,7 @@ public class AppProperties {
     private int expiryDate;
     private String defaultAdminUsername;
     private String defaultAdminPassword;
+    private String newUserDefaultPassword;
 
     int getExpiryDate() {
         return expiryDate;
@@ -33,5 +34,13 @@ public class AppProperties {
     }
     void setDefaultAdminPassword(String defaultAdminPassword){
         this.defaultAdminPassword = defaultAdminPassword;
+    }
+
+    public String getNewUserDefaultPassword() {
+        return newUserDefaultPassword;
+    }
+
+    public void setNewUserDefaultPassword(String newUserDefaultPassword) {
+        this.newUserDefaultPassword = newUserDefaultPassword;
     }
 }

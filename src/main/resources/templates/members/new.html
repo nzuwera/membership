@@ -40,6 +40,10 @@
                                 th:value="${p}" th:text="${p}"></option>
                     </select>
                 </div>
+                <div class="col-md-6">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" th:field="*{password}" required>
+                </div>
                 <div class="col-12 d-flex gap-2">
                     <button class="btn btn-primary" type="submit">Save</button>
                     <a class="btn btn-secondary" th:href="@{/members}">Cancel</a>
