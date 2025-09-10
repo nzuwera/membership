@@ -7,6 +7,7 @@ import com.nzuwera.membership.dto.MemberDto;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.service.IMemberService;
 import com.nzuwera.membership.utils.ResponseObject;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/members")
