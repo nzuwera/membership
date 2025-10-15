@@ -14,8 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -43,14 +44,14 @@ public class MemberDto {
     /**
      * Member password (plain for input only)
      */
-    @NotBlank(message = "password is required")
     private String password;
     /**
      * Member date of birth
      */
     @Past(message = "dateOfBirth must be in the past")
     @NotNull(message = "dateOfBirth is required")
-    private Date dateOfBirth;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
     /**
      * Member plan
      */

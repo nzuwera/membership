@@ -1,5 +1,6 @@
 package com.nzuwera.membership.service;
 
+import com.nzuwera.membership.config.AppProperties;
 import com.nzuwera.membership.domain.Member;
 import com.nzuwera.membership.dto.MemberDto;
 import com.nzuwera.membership.exception.AlreadyExistsException;
@@ -10,6 +11,7 @@ import com.nzuwera.membership.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +24,9 @@ import java.util.stream.Collectors;
 class MemberService implements IMemberService {
 
     private final MemberRepository repository;
-    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    private final AppProperties appProperties;
 
     /**
      * Create new member
@@ -34,27 +38,30 @@ class MemberService implements IMemberService {
     @Override
     @Transactional
     public ResponseObject createMember(MemberDto memberDto) {
-        repository.findByEmail(memberDto.getEmail()).ifPresent(member -> {
-            throw new AlreadyExistsException(String.format("Member with email %s already exists", member.getEmail()));
-        });
-        Member member = MemberDto.toEntity(memberDto);
-        // encode password and set defaults for role/status if null
-        if (memberDto.getPassword() != null && !memberDto.getPassword().isBlank()) {
-            member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        try {
+            repository.findByEmail(memberDto.getEmail()).ifPresent(member -> {
+                throw new AlreadyExistsException(String.format("Member with email %s already exists", member.getEmail()));
+            });
+            Member member = MemberDto.toEntity(memberDto);
+            member.setPassword(encodePasswordOrDefault(memberDto.getPassword()));
+
+            if (member.getRole() == null) {
+                member.setRole(com.nzuwera.membership.domain.Role.USER);
+            }
+            if (member.getStatus() == null) {
+                member.setStatus(com.nzuwera.membership.domain.MemberStatus.ACTIVE);
+            }
+            Member newMember = repository.save(member);
+            return ResponseObject.builder()
+                    .data(MemberDto.fromEntity(newMember))
+                    .status(true)
+                    .errorCode(HttpStatus.CREATED.value())
+                    .message(String.format("Member with email %s created", member.getEmail()))
+                    .build();
+        } catch (Exception ex) {
+            log.error("Exception occurred while creating member", ex);
+            return new ResponseObject(ex);
         }
-        if (member.getRole() == null) {
-            member.setRole(com.nzuwera.membership.domain.Role.USER);
-        }
-        if (member.getStatus() == null) {
-            member.setStatus(com.nzuwera.membership.domain.MemberStatus.ACTIVE);
-        }
-        Member newMember = repository.save(member);
-        return ResponseObject.builder()
-                .data(MemberDto.fromEntity(newMember))
-                .status(true)
-                .errorCode(HttpStatus.CREATED.value())
-                .message(String.format("Member with email %s created", member.getEmail()))
-                .build();
 
     }
 
@@ -114,5 +121,18 @@ class MemberService implements IMemberService {
     @Transactional
     public void deleteMember(String email) {
         repository.findByEmail(email).ifPresent(repository::delete);
+    }
+
+    /**
+     * Encodes the provided password or returns the encoded default password if the input is blank.
+     *
+     * @param password the password to encode, may be null or blank
+     * @return encoded password or encoded default password if input is blank
+     */
+    private String encodePasswordOrDefault(String password) {
+        if (password == null || password.isBlank()) {
+            return passwordEncoder.encode(appProperties.getDefaultPassword());
+        }
+        return passwordEncoder.encode(password);
     }
 }

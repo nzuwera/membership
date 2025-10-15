@@ -20,8 +20,10 @@ class HomeController {
         return "login";
     }
 
-    @GetMapping("home")
-    String home() {
+    @GetMapping("/home")
+    public String home(Model model) {
+        model.addAttribute("activeNav", "home");
+        model.addAttribute("pageTitle", "Home");
         return "home";
     }
 

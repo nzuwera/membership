@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+
+<!-- Error Summary Alert -->
+<div th:fragment="error-summary" th:if="${#fields.hasAnyErrors()}"
+     class="mb-6 bg-red-50 border-l-4 border-red-400 p-4">
+    <div class="flex">
+        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+        <p class="ml-3 text-sm text-red-700 font-medium">
+            Please correct the errors below before submitting.
+        </p>
+    </div>
+</div>
+
+<!-- Social Login Buttons -->
+<div th:fragment="social-login" class="grid grid-cols-2 gap-3 mb-6">
+    <button type="button" class="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+        <img th:src="@{/images/google.svg}" alt="Google" class="w-4 h-4">
+        <span>Google</span>
+    </button>
+    <button type="button" class="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+        <img th:src="@{/images/microsoft.svg}" alt="Microsoft" class="w-4 h-4">
+        <span>Microsoft</span>
+    </button>
+</div>
+
+<!-- Divider -->
+<div th:fragment="divider(text)" class="relative mb-6">
+    <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-gray-200"></div>
+    </div>
+    <div class="relative flex justify-center text-sm">
+        <span class="px-3 bg-white text-gray-500" th:text="${text}">or</span>
+    </div>
+</div>
+
+</body>
+</html>
