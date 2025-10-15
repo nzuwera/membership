@@ -19,45 +19,66 @@ class MemberPageController {
     private final IMemberService memberService;
 
     @GetMapping
-    String list(Model model) {
+    String listMembers(Model model) {
         ResponseObject response = memberService.findAllMembers();
         model.addAttribute("members", response.getData());
+        model.addAttribute("activeNav", "members");
+        model.addAttribute("pageTitle", "Members");
         return "members/list";
-        }
+    }
 
-    @GetMapping("/new")
-    String createForm(Model model) {
+    @GetMapping("/create")
+    String showCreateForm(Model model) {
         model.addAttribute("member", new MemberDto());
+        model.addAttribute("activeNav", "members");
+        model.addAttribute("pageTitle", "New Member");
         return "members/new";
     }
 
     @PostMapping
-    String create(@Valid @ModelAttribute("member") MemberDto memberDto, BindingResult result, Model model) {
+    String createMember(@Valid @ModelAttribute("member") MemberDto memberDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("activeNav", "members");
+            model.addAttribute("pageTitle", "New Member");
             return "members/new";
         }
-        memberService.createMember(memberDto);
+        ResponseObject responseObject = memberService.createMember(memberDto);
+        model.addAttribute("message", responseObject.getMessage());
         return "redirect:/members";
     }
 
     @GetMapping("/{email}")
-    String view(@PathVariable String email, Model model) {
+    String viewMember(@PathVariable String email, Model model) {
         ResponseObject response = memberService.findMemberByEmail(email);
         model.addAttribute("member", response.getData());
+        model.addAttribute("activeNav", "members");
+        model.addAttribute("pageTitle", "View Member");
         return "members/view";
     }
 
-    @PostMapping("/{email}")
-    String update(@PathVariable String email, @Valid @ModelAttribute("member") MemberDto memberDto, BindingResult result) {
+    @GetMapping("/{email}/edit")
+    String showEditForm(@PathVariable String email, Model model) {
+        ResponseObject response = memberService.findMemberByEmail(email);
+        model.addAttribute("member", response.getData());
+        model.addAttribute("activeNav", "members");
+        model.addAttribute("pageTitle", "Edit Member");
+        return "members/new";
+    }
+
+    @PostMapping("/{email}/edit")
+    String updateMember(@PathVariable String email, @Valid @ModelAttribute("member") MemberDto memberDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "members/view";
+            model.addAttribute("activeNav", "members");
+            model.addAttribute("pageTitle", "Edit Member");
+            return "members/new";
         }
-        memberService.updateMember(email, memberDto);
+        ResponseObject responseObject = memberService.updateMember(email, memberDto);
+        model.addAttribute("message", responseObject.getMessage());
         return "redirect:/members";
     }
 
     @PostMapping("/{email}/delete")
-    String delete(@PathVariable String email) {
+    String deleteMember(@PathVariable String email) {
         memberService.deleteMember(email);
         return "redirect:/members";
     }

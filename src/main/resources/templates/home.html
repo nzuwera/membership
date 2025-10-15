@@ -1,18 +1,19 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}"
+      lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Home</title>
-
-    <!-- Bootstrap 5.3.8 CSS (CDN) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="p-5">
-<div class="container">
-    <h2>Welcome</h2>
-    <p>This is a placeholder home page. Replace with your real application landing page.</p>
-    <a th:href="@{/login}" class="btn btn-link">Back to login</a>
+<body>
+
+<div layout:fragment="content">
+    <div class="border-4 border-dashed border-gray-200 rounded-lg h-96 flex flex-col items-center justify-center bg-white">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome</h2>
+        <p class="text-gray-700">This is a placeholder home page. Replace with your real application landing page.</p>
+    </div>
 </div>
+
 </body>
 </html>

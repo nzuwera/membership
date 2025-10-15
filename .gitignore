@@ -41,3 +41,7 @@ META-INF/
 
 ### Docker temp files
 docker
+
+### Frontend ###
+
+/src/main/frontend/node_modules/

@@ -16,7 +16,7 @@ class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/login", "/register", "/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/api-docs/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/info", "/actuator/metrics").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -25,12 +25,17 @@ class SecurityConfig {
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
-                .logout(Customizer.withDefaults())
+                .logout(logoutConfigurer -> {
+                    logoutConfigurer.invalidateHttpSession(true);
+                    logoutConfigurer.clearAuthentication(true);
+                    logoutConfigurer.deleteCookies("JSESSIONID");
+                    logoutConfigurer.permitAll();
+                    logoutConfigurer.logoutUrl("/logout");
+                    logoutConfigurer.logoutSuccessUrl("/login?logout");
+                })
                 .csrf(Customizer.withDefaults());
         return http.build();
     }
-
-    // UserDetailsService is provided by JpaUserDetailsService to load users from DB
 
     @Bean
     PasswordEncoder passwordEncoder() {
