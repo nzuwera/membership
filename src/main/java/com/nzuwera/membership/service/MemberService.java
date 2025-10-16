@@ -2,7 +2,9 @@ package com.nzuwera.membership.service;
 
 import com.nzuwera.membership.config.AppProperties;
 import com.nzuwera.membership.domain.Member;
+import com.nzuwera.membership.dto.ChangePasswordRequest;
 import com.nzuwera.membership.dto.MemberDto;
+import com.nzuwera.membership.dto.UpdateProfileInfoRequest;
 import com.nzuwera.membership.exception.AlreadyExistsException;
 import com.nzuwera.membership.exception.NotFoundException;
 import com.nzuwera.membership.repository.MemberRepository;
@@ -93,6 +95,23 @@ class MemberService implements IMemberService {
     }
 
     @Override
+    @Transactional
+    public ResponseObject updateInfo(String email, UpdateProfileInfoRequest profileInfoRequest) {
+        try {
+            int rowsUpdated = repository.updateInfo(email, profileInfoRequest);
+            if (rowsUpdated == 0) {
+                throw new NotFoundException(email);
+            }
+            // Fetch the updated member
+            Member member = repository.findByEmail(profileInfoRequest.getEmail())
+                    .orElseThrow(() -> new NotFoundException(profileInfoRequest.getEmail()));
+            return Utils.setSuccessResponse(MemberDto.fromEntity(member));
+        } catch (Exception ex) {
+            return new ResponseObject(ex);
+        }
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public ResponseObject findMemberByEmail(String email) {
         try {
@@ -134,5 +153,41 @@ class MemberService implements IMemberService {
             return passwordEncoder.encode(appProperties.getDefaultPassword());
         }
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    @Transactional
+    public ResponseObject updatePassword(String username, ChangePasswordRequest changePasswordRequest) {
+        try {
+            // Fetch the member first
+            Member member = repository.findByEmail(username)
+                    .orElseThrow(() -> new NotFoundException(username));
+
+            // Verify old password matches
+            if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), member.getPassword())) {
+                return ResponseObject.builder()
+                        .status(false)
+                        .errorCode(HttpStatus.BAD_REQUEST.value())
+                        .message("Current password is incorrect")
+                        .build();
+            }
+
+            // Update password
+            int rowsUpdated = repository.changePassword(username, passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            if (rowsUpdated == 0) {
+                throw new NotFoundException(username);
+            }
+
+            return ResponseObject.builder()
+                    .status(true)
+                    .errorCode(HttpStatus.OK.value())
+                    .message("Password changed successfully")
+                    .data(MemberDto.fromEntity(member))
+                    .build();
+        } catch (NotFoundException ex) {
+            return new ResponseObject(ex);
+        } catch (Exception ex) {
+            return new ResponseObject(ex);
+        }
     }
 }
