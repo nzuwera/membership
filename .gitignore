@@ -2,7 +2,6 @@ target/
 .mvn/
 mvn*
 logs/
-certificates/
 
 ### STS ###
 .apt_generated
@@ -45,3 +44,7 @@ docker
 ### Frontend ###
 
 /src/main/frontend/node_modules/
+Kannel User's Guide-tailwindcss.html
+Kannel User's Guide.html
+infra/nginx/certs/
+migration/
